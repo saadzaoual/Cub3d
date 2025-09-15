@@ -23,8 +23,8 @@
 # define PLAYER_SIZE 8
 # define PLAYER_OFFSET 12
 
-# define SCREEN_WIDTH 800
-# define SCREEN_HEIGHT 520
+# define MIN_SCREEN_WIDTH 800
+# define MIN_SCREEN_HEIGHT 520
 # define WALL_HEIGHT_FACTOR 100
 
 # define KEY_ESC 65307
@@ -73,6 +73,8 @@ typedef struct s_map
     char    **map;
     int     width;
     int     height;
+    int     screen_width;
+    int     screen_height;
     t_ray   rays[RAY_NUM];
     t_player player;
     t_key_state keys;

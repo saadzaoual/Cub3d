@@ -119,11 +119,11 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
 void render_3d_view(t_map *game)
 {
 
-    for (int y = 0; y < SCREEN_HEIGHT; y++)
+    for (int y = 0; y < game->screen_height; y++)
     {
-        for (int x = 0; x < SCREEN_WIDTH; x++)
+        for (int x = 0; x < game->screen_width; x++)
         {
-            if (y < SCREEN_HEIGHT / 2)
+            if (y < game->screen_height / 2)
                 pixel_put_img(game, x, y, 0x87CEEB); // Sky blue ceiling
             else
                 pixel_put_img(game, x, y, 0x8B4513); // Brown floor
@@ -131,10 +131,10 @@ void render_3d_view(t_map *game)
     }
     
     double fov = 60.0;
-    double angle_step = fov / SCREEN_WIDTH;
+    double angle_step = fov / game->screen_width;
     double start_angle = game->player.angle - (fov / 2.0);
     
-    for (int x = 0; x < SCREEN_WIDTH; x++)
+    for (int x = 0; x < game->screen_width; x++)
     {
         double current_angle = start_angle + (x * angle_step);
         
@@ -145,13 +145,13 @@ void render_3d_view(t_map *game)
         
         if (ray.distance > 0)
         {
-            int wall_height = (int)((TILE * SCREEN_HEIGHT) / ray.distance);
+            int wall_height = (int)((TILE * game->screen_height) / ray.distance);
             
-            int draw_start = (SCREEN_HEIGHT - wall_height) / 2;
+            int draw_start = (game->screen_height - wall_height) / 2;
             int draw_end = draw_start + wall_height;
 
             if (draw_start < 0) draw_start = 0;
-            if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
+            if (draw_end >= game->screen_height) draw_end = game->screen_height - 1;
             
             int color;
             if (ray.hit_side == 0) // Vertical wall

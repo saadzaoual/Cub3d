@@ -54,6 +54,19 @@ t_map *fill_map(char *av)
 
     map->width = ft_strlen1(map->map[0]);
 
+    // Calculate screen size based on map dimensions with minimum values
+    map->screen_width = map->width * TILE;
+    map->screen_height = map->height * TILE;
+    
+    // Ensure minimum screen size for usability
+    if (map->screen_width < MIN_SCREEN_WIDTH)
+        map->screen_width = MIN_SCREEN_WIDTH;
+    if (map->screen_height < MIN_SCREEN_HEIGHT)
+        map->screen_height = MIN_SCREEN_HEIGHT;
+
+    printf("Screen size calculated: %dx%d (based on map %dx%d)\n", 
+           map->screen_width, map->screen_height, map->width, map->height);
+
     // Validate map before returning
     validate_map(map);
 

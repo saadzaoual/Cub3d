@@ -14,7 +14,7 @@
 
 void pixel_put_img(t_map *map, int x, int y, int color)
 {
-    if (x < 0 || y < 0 || x >= map->width * TILE || y >= map->height * TILE)
+    if (x < 0 || y < 0 || x >= map->screen_width || y >= map->screen_height)
         return;
 
     int index = y * map->img_size_line + x * (map->img_bpp / 8);
@@ -47,7 +47,7 @@ static int init_mlx_connection(t_map *map)
         return 0;
     }
 
-    map->win = mlx_new_window(map->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "CUB3D - THE_LO3BA");
+    map->win = mlx_new_window(map->mlx, map->screen_width, map->screen_height, "CUB3D - THE_LO3BA");
     if (!map->win)
     {
         printf("Error: Failed to create window\n");
@@ -62,7 +62,7 @@ static int init_mlx_connection(t_map *map)
 // Initialize image buffer for rendering
 static int init_rendering(t_map *map)
 {
-    map->img = mlx_new_image(map->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+    map->img = mlx_new_image(map->mlx, map->screen_width, map->screen_height);
     if (!map->img)
     {
         printf("Error: Failed to create image buffer\n");
@@ -77,7 +77,7 @@ static int init_rendering(t_map *map)
         return 0;
     }
     
-    printf("Rendering initialized: %dx%d buffer\n", SCREEN_WIDTH, SCREEN_HEIGHT);
+    printf("Rendering initialized: %dx%d buffer\n", map->screen_width, map->screen_height);
     return 1;
 }
 
