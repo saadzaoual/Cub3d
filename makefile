@@ -27,7 +27,8 @@ all: $(MLX_PATH)libmlx.a $(NAME)
 
 $(MLX_PATH)libmlx.a:
 	@echo "Building MLX library..."
-	@make -C $(MLX_PATH) --no-print-directory
+	@cd $(MLX_PATH) && (./configure && make -f Makefile.gen) || true
+	@test -f $(MLX_PATH)libmlx.a || (echo "MLX library not found!" && exit 1)
 
 $(NAME): $(OBJS) $(MLX_PATH)libmlx.a
 	$(CC) $(CFLAGS) $(OBJS) $(MLX_FLAGS) -o $(NAME)
