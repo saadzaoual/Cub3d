@@ -11,6 +11,7 @@ SRCS = \
 	parsing/parsing.c \
 	parsing/check_map.c \
 	parsing/check_walls.c \
+	parsing/edge_cases.c \
 	parsing/mini_libft.c \
 	src/main.c \
 	src/init.c \

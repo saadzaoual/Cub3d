@@ -86,28 +86,39 @@ void setup_player(t_map *map)
 {
     printf("Setting up player...\n");
     
-    // Find first free space for player spawn
+    // Find player spawn position (N, S, E, W)
     for (int y = 0; y < map->height; y++)
     {
         for (int x = 0; x < map->width; x++)
         {
-            if (map->map[y][x] == '0')
+            char spawn = map->map[y][x];
+            if (spawn == 'N' || spawn == 'S' || spawn == 'E' || spawn == 'W')
             {
                 map->player.player_x = x * TILE + (TILE / 2);
                 map->player.player_y = y * TILE + (TILE / 2);
-                map->player.angle = 0.0;
-                printf("Player spawned at: (%.1f, %.1f) angle: %.1f°\n", 
-                       map->player.player_x, map->player.player_y, map->player.angle);
+                
+                // Set initial angle based on spawn direction
+                switch (spawn)
+                {
+                    case 'N': map->player.angle = 270.0; break; // North (up)
+                    case 'S': map->player.angle = 90.0; break;  // South (down)
+                    case 'E': map->player.angle = 0.0; break;   // East (right)
+                    case 'W': map->player.angle = 180.0; break; // West (left)
+                }
+                
+                // Replace spawn character with free space
+                map->map[y][x] = '0';
+                
+                printf("Player spawned at: (%.1f, %.1f) facing %c (angle: %.1f°)\n", 
+                       map->player.player_x, map->player.player_y, spawn, map->player.angle);
                 return;
             }
         }
     }
     
-    // Fallback if no free space found
-    printf("Warning: No free space found, using default position\n");
-    map->player.player_x = TILE / 2;
-    map->player.player_y = TILE / 2;
-    map->player.angle = 0.0;
+    // This should not happen if edge case validation passed
+    printf("Error: No player spawn found (this should not happen)\n");
+    exit(1);
 }
 
 // Initial render

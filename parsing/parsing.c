@@ -18,6 +18,10 @@ t_map	*check_map(char *av)
 
 	check_ext(av);      // done -> checking for argument and ext map .cub
 	map = fill_map(av);  // done -> filling the map with content from the map fil into our 2d arr
+	
+	// Check edge cases first before other validations
+	check_map_edge_cases(map);
+	
 	if (map->width > 1920 || map->height > 1080) // settign limit for the resoulition
 	{
 		puts("Error\nthe map is too big!!\n"); //forbiden use

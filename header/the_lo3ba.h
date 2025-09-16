@@ -90,6 +90,7 @@ t_map   *check_map(char *av);
 void    check_ext(char *name);
 void    check_shape(t_map *map);
 void    check_walls(t_map *map);
+void    check_map_edge_cases(t_map *map);
 
 int     map_height(char *av);
 t_map   *init_map_height(int h);
