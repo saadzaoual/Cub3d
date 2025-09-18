@@ -3,20 +3,11 @@ NAME    = lo3ba
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror -fsanitize=address
 
-# ── Auto-detect host OS ───────────────────────────────────────────────
-UNAME_S := $(shell uname -s)
+# ── MiniLibX (Linux) ─────────────────────────────────────────────────
+MLX_DIR   = ./minilibx-linux
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
-ifeq ($(UNAME_S), Linux)
-    MLX_DIR   = ./minilibx-linux
-    MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
-endif
-
-ifeq ($(UNAME_S), Darwin)
-    MLX_DIR   = ./minilibx-mac
-    MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
-endif
-
-# ── Source files ──────────────────────────────────────────────────────
+# ── Sources ───────────────────────────────────────────────────────────
 SRCS = \
 	get_line/get_next_line.c \
 	get_line/get_next_line_utils.c \
@@ -39,7 +30,6 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo "🔗 Linking $(NAME)..."
 	$(CC) $(CFLAGS) $(OBJS) $(MLX_FLAGS) -o $(NAME)
 
 %.o: %.c
@@ -52,5 +42,3 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-.PHONY: all clean fclean re
