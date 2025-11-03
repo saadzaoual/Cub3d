@@ -7,7 +7,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <math.h>
-# include "../minilibx-linux/mlx.h"
+# include <mlx.h>
 # include "../get_line/get_next_line.h"
 
 # define TILE 64
@@ -63,6 +63,7 @@ typedef struct s_key_state
 
 typedef struct s_map
 {
+    int map_fd;
     void    *mlx;
     void    *win;
     void    *img;
@@ -71,6 +72,12 @@ typedef struct s_map
     int     img_size_line;
     int     img_endian;
     char    **map;
+    char    *no_texture;    // North wall texture path
+    char    *so_texture;    // South wall texture path
+    char    *we_texture;    // West wall texture path
+    char    *ea_texture;    // East wall texture path
+    char    *floor_color;   // Floor color string (R,G,B)
+    char    *ceiling_color; // Ceiling color string (R,G,B)
     int     width;
     int     height;
     t_ray   rays[RAY_NUM];
@@ -84,10 +91,8 @@ int     update_player(t_map *map);
 
 void    setup_events(t_map *map);
 
-t_map   *check_map(char *av);
-void    check_ext(char *name);
-void    check_shape(t_map *map);
-void    check_walls(t_map *map);
+
+
 
 int     map_height(char *av);
 t_map   *init_map_height(int h);
@@ -99,6 +104,13 @@ t_map   *fill_map(char *av);
 void    pixel_put_img(t_map *map, int x, int y, int color);
 
 int     ft_strlen1(char *str);
+int     read_file(t_map *map, char *filename);
+int     parse_map_config(t_map *map);
+char    *skip_spaces(char *str);
+char    *extract_path(char *line);
+int     parse_color(char *line);
+int     validate_color_format(char *color_str);
+int     validate_parsing_completeness(t_map *map);
 
 void    load_game(t_map *map);
 void    set_color(t_map *map);
