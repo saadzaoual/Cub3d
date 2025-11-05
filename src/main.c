@@ -376,11 +376,95 @@ int	read_file(t_map *map, char *filename)
 		i++;
 	}
 	file_content[i] = NULL;
-	
+
 	close(map->map_fd);
+
+	/* Keep the full file content (headers + map). We'll let the caller
+	   (main) trim the header after parsing textures so both parsing
+	   and the final map grid are correct. */
 	map->map = file_content;
-	
+	map->height = i;
+
+	/* Compute a conservative width (max line length) for now; the true
+	   grid width will be computed after trimming header lines in main. */
+	map->width = 0;
+	for (int j = 0; j < i; j++)
+	{
+		int len = 0;
+		while (file_content[j][len] && file_content[j][len] != '\n' && file_content[j][len] != '\r')
+			len++;
+		if (len > map->width)
+			map->width = len;
+	}
+
 	return (1);
+}
+
+/* Validate map grid characters and locate player spawn.
+   Allowed characters in the grid: '1', '0', and exactly one of 'N','S','W','E'.
+   The function sets map->player.player_x/player_y and player.angle and
+   replaces the spawn char in the map with '0'. Returns 1 on success, 0 on error. */
+int validate_and_set_player(t_map *map)
+{
+	if (!map || !map->map)
+		return 0;
+
+	int player_count = 0;
+	for (int y = 0; y < map->height; y++)
+	{
+		int x = 0;
+		while (map->map[y][x] && map->map[y][x] != '\n' && map->map[y][x] != '\r')
+		{
+			char c = map->map[y][x];
+			if (c == '1' || c == '0')
+			{
+				/* ok */
+			}
+			else if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
+			{
+				player_count++;
+				if (player_count > 1)
+				{
+					printf("Error\nMap contains more than one player spawn\n");
+					cleanup_map(map);
+					exit(1);
+				}
+				/* Set player position to center of tile */
+				map->player.player_x = x * TILE + TILE / 2;
+				map->player.player_y = y * TILE + TILE / 2;
+
+				/* Set player angle: 0=E, 90=S, 180=W, 270=N (degrees) */
+				if (c == 'N')
+					map->player.angle = 270.0;
+				else if (c == 'S')
+					map->player.angle = 90.0;
+				else if (c == 'W')
+					map->player.angle = 180.0;
+				else /* 'E' */
+					map->player.angle = 0.0;
+
+				/* Replace spawn char with free space */
+				map->map[y][x] = '0';
+				map->player_set = 1;
+			}
+			else
+			{
+				printf("Error\nInvalid character '%c' in map at (%d,%d)\n", c, y, x);
+				cleanup_map(map);
+				exit(1);
+			}
+			x++;
+		}
+	}
+
+	if (player_count == 0)
+	{
+		printf("Error\nNo player spawn (N/S/W/E) found in map\n");
+		cleanup_map(map);
+		exit(1);
+	}
+
+	return 1;
 }
 
 int	main(int ac, char **av)
@@ -400,7 +484,8 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	
-
+	/* Initialize all pointers to NULL so cleanup_map can safely check them.
+	   This prevents crashes when validation fails before MLX is initialized. */
 	map->map = NULL;
 	map->map_fd = -1;
 	map->no_texture = NULL;
@@ -409,6 +494,10 @@ int	main(int ac, char **av)
 	map->ea_texture = NULL;
 	map->floor_color = NULL;
 	map->ceiling_color = NULL;
+	map->mlx = NULL;
+	map->win = NULL;
+	map->img = NULL;
+	map->img_data = NULL;
 	
 	if (!check_and_open_file(av[1], map))
 	{
@@ -445,7 +534,69 @@ int	main(int ac, char **av)
 	printf("EA: %s\n", map->ea_texture ? map->ea_texture : "NULL");
 	printf("F: %s\n", map->floor_color ? map->floor_color : "NULL");
 	printf("C: %s\n", map->ceiling_color ? map->ceiling_color : "NULL");
-	
+
+	/* Debug: print detected map dimensions */
+	printf("Map dimensions: height=%d width=%d\n", map->height, map->width);
+	/* Optionally print the map lines (first 20 lines max) for quick verification */
+	for (int li = 0; li < map->height && li < 20; li++)
+		printf("%2d: %s", li, map->map[li]);
+    
+	/* Now that parsing is done, extract only the actual grid rows (lines
+	   starting with '1' or '0') into map->map so rendering and player
+	   setup iterate the grid directly. This keeps header parsing and the
+	   game grid separate. */
+	int start_idx = 0;
+	while (start_idx < map->height)
+	{
+		char *s = skip_spaces(map->map[start_idx]);
+		if (s && (*s == '1' || *s == '0'))
+			break;
+		start_idx++;
+	}
+	if (start_idx >= map->height)
+	{
+		printf("Error\nNo map grid found in file\n");
+		cleanup_map(map);
+		return (1);
+	}
+
+	int map_lines = map->height - start_idx;
+	char **grid = malloc(sizeof(char *) * (map_lines + 1));
+	if (!grid)
+	{
+		printf("Error\nMemory allocation failed\n");
+		cleanup_map(map);
+		return (1);
+	}
+	for (int k = 0; k < map_lines; k++)
+		grid[k] = map->map[start_idx + k];
+	grid[map_lines] = NULL;
+
+	/* Free header lines and the original array container */
+	for (int k = 0; k < start_idx; k++)
+		free(map->map[k]);
+	free(map->map);
+
+	map->map = grid;
+	map->height = map_lines;
+	/* recompute width from grid */
+	map->width = 0;
+	for (int j = 0; j < map->height; j++)
+	{
+		int len = 0;
+		while (map->map[j][len] && map->map[j][len] != '\n' && map->map[j][len] != '\r')
+			len++;
+		if (len > map->width)
+			map->width = len;
+	}
+
+	/* Validate that the grid contains only allowed characters and set player */
+	if (!validate_and_set_player(map))
+	{
+		cleanup_map(map);
+		return (1);
+	}
+
 	load_game(map);
 	cleanup_map(map);
 	return (0);

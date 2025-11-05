@@ -1,7 +1,7 @@
 NAME      = lo3ba
 CC        = cc
 CFLAGS    = -Wall -Wextra -Werror -fsanitize=address
-MLX_FLAGS = -lmlx -lXext -lX11
+MLX_FLAGS = -lmlx -lXext -lX11 -lm
 
 SRCS = \
 	get_line/get_next_line.c \

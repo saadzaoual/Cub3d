@@ -92,8 +92,18 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
 
         if (map_y >= 0 && map_y < game->height && map_x >= 0 && map_x < game->width)
         {
-            if (game->map[map_y][map_x] == '1')
+            /* Safety check: ensure the string is long enough before accessing */
+            if (game->map[map_y] && game->map[map_y][map_x] && 
+                game->map[map_y][map_x] != '\n' && game->map[map_y][map_x] != '\r')
+            {
+                if (game->map[map_y][map_x] == '1')
+                    hit = 1;
+            }
+            else
+            {
+                /* Treat out-of-bounds or short lines as walls to prevent crashes */
                 hit = 1;
+            }
         }
     }
 

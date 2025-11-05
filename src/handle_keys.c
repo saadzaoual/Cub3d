@@ -30,17 +30,22 @@ void clear_player_area(t_map *map)
 
             if (tile_x >= 0 && tile_x < map->width && tile_y >= 0 && tile_y < map->height)
             {
-                if (map->map[tile_y][tile_x] == '1')
-                    color = COLOR_WALL;
-                else if (map->map[tile_y][tile_x] == '0')
-                    color = COLOR_FREE;
-                else
+                /* Safety: check that line exists and is long enough before accessing */
+                if (map->map[tile_y] && map->map[tile_y][tile_x] && 
+                    map->map[tile_y][tile_x] != '\n' && map->map[tile_y][tile_x] != '\r')
                 {
-                    y++;
-                    continue;
-                }
+                    if (map->map[tile_y][tile_x] == '1')
+                        color = COLOR_WALL;
+                    else if (map->map[tile_y][tile_x] == '0')
+                        color = COLOR_FREE;
+                    else
+                    {
+                        y++;
+                        continue;
+                    }
 
-                draw_square(map, tile_x, tile_y, color);
+                    draw_square(map, tile_x, tile_y, color);
+                }
             }
             y++;
         }
@@ -73,6 +78,11 @@ int is_valid_move(t_map *map, int new_x, int new_y)
     if (tile_x < 0 || tile_x >= map->width ||
         tile_y < 0 || tile_y >= map->height)
         return 0;
+
+    /* Safety: check that line exists and is long enough */
+    if (!map->map[tile_y] || !map->map[tile_y][tile_x] || 
+        map->map[tile_y][tile_x] == '\n' || map->map[tile_y][tile_x] == '\r')
+        return 0;  /* Treat as wall if out of bounds */
 
     // Check if center tile is free (not a wall)
     if (map->map[tile_y][tile_x] == '1')

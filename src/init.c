@@ -61,6 +61,7 @@ t_map *init_map_height(int h)
     map->player.player_x = 0;
     map->player.player_y = 0;
     map->player.angle = 0.0;
+    map->player_set = 0;
 
     i = 0;
     while (i < RAY_NUM)

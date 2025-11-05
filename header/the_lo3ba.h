@@ -82,6 +82,7 @@ typedef struct s_map
     int     height;
     t_ray   rays[RAY_NUM];
     t_player player;
+    int     player_set;
     t_key_state keys;
 }   t_map;
 
@@ -90,6 +91,8 @@ int     handle_key_release(int keycode, t_map *map);
 int     update_player(t_map *map);
 
 void    setup_events(t_map *map);
+
+int     validate_and_set_player(t_map *map);
 
 
 

@@ -14,7 +14,13 @@
 
 void pixel_put_img(t_map *map, int x, int y, int color)
 {
-    if (x < 0 || y < 0 || x >= map->width * TILE || y >= map->height * TILE)
+    /*
+     * The image buffer size is SCREEN_WIDTH x SCREEN_HEIGHT. Previously this
+     * function used map->width * TILE and map->height * TILE for bounds
+     * checks which prevents drawing when the map (in tiles) is smaller than
+     * the screen. Use the screen dimensions instead.
+     */
+    if (x < 0 || y < 0 || x >= SCREEN_WIDTH || y >= SCREEN_HEIGHT)
         return;
 
     int index = y * map->img_size_line + x * (map->img_bpp / 8);
@@ -85,13 +91,25 @@ static int init_rendering(t_map *map)
 void setup_player(t_map *map)
 {
     printf("Setting up player...\n");
+    if (map->player_set)
+    {
+        printf("Player already set by parser at: (%.1f, %.1f) angle: %.1f°\n",
+               map->player.player_x, map->player.player_y, map->player.angle);
+        return;
+    }
     
     // Find first free space for player spawn
     for (int y = 0; y < map->height; y++)
     {
+        /* Safety: check that the line exists and is long enough */
+        if (!map->map[y])
+            continue;
+        
         for (int x = 0; x < map->width; x++)
         {
-            if (map->map[y][x] == '0')
+            /* Safety: check bounds before accessing array */
+            if (map->map[y][x] && map->map[y][x] != '\n' && 
+                map->map[y][x] != '\r' && map->map[y][x] == '0')
             {
                 map->player.player_x = x * TILE + (TILE / 2);
                 map->player.player_y = y * TILE + (TILE / 2);
