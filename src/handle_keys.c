@@ -34,7 +34,7 @@ void clear_player_area(t_map *map)
                 if (map->map[tile_y] && map->map[tile_y][tile_x] && 
                     map->map[tile_y][tile_x] != '\n' && map->map[tile_y][tile_x] != '\r')
                 {
-                    if (map->map[tile_y][tile_x] == '1')
+                    if (map->map[tile_y][tile_x] == '1' || map->map[tile_y][tile_x] == ' ')
                         color = COLOR_WALL;
                     else if (map->map[tile_y][tile_x] == '0')
                         color = COLOR_FREE;
@@ -84,8 +84,8 @@ int is_valid_move(t_map *map, int new_x, int new_y)
         map->map[tile_y][tile_x] == '\n' || map->map[tile_y][tile_x] == '\r')
         return 0;  /* Treat as wall if out of bounds */
 
-    // Check if center tile is free (not a wall)
-    if (map->map[tile_y][tile_x] == '1')
+    // Check if center tile is free (not a wall or space)
+    if (map->map[tile_y][tile_x] == '1' || map->map[tile_y][tile_x] == ' ')
         return 0;
 
     return 1;

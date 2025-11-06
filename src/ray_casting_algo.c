@@ -96,7 +96,8 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
             if (game->map[map_y] && game->map[map_y][map_x] && 
                 game->map[map_y][map_x] != '\n' && game->map[map_y][map_x] != '\r')
             {
-                if (game->map[map_y][map_x] == '1')
+                /* Treat walls ('1') and spaces (' ') as solid walls */
+                if (game->map[map_y][map_x] == '1' || game->map[map_y][map_x] == ' ')
                     hit = 1;
             }
             else
