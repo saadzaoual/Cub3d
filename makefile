@@ -1,6 +1,6 @@
 NAME      = lo3ba
 CC        = cc
-CFLAGS    = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS    = -Wall -Wextra -Werror 
 MLX_FLAGS = -lmlx -lXext -lX11 -lm
 
 SRCS = \

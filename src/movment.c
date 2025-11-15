@@ -15,7 +15,6 @@
 int update_player(t_map *map)
 {
 
-    // chi struct hna for player update pos
     double new_x;
     double new_y;
     double angle;
@@ -29,7 +28,6 @@ int update_player(t_map *map)
     new_y = map->player.player_y;
     angle = map->player.angle;
 
-    // Handle rotation with smaller increments
     if (map->keys.left)
     {
         angle -= ROTATION_SPEED;
@@ -43,7 +41,6 @@ int update_player(t_map *map)
             angle -= 360;
     }
 
-    // Movement vector accumulators
     move_x = 0;
     move_y = 0;
 
@@ -100,9 +97,9 @@ int handle_key_release(int keycode, t_map *map)
         map->keys.s = 0;
     else if (keycode == KEY_D)
         map->keys.d = 0;
-    else if (keycode == 65361) // left arrow
+    else if (keycode == 65361)
         map->keys.left = 0;
-    else if (keycode == 65363) // right arrow
+    else if (keycode == 65363)
         map->keys.right = 0;
 
     return 0;
@@ -111,10 +108,7 @@ int handle_key_release(int keycode, t_map *map)
 int handle_key_press(int keycode, t_map *map)
 {
     if (keycode == KEY_ESC)
-    {
-        printf("A ZGAAA ESC was presed :CHAKCHABANI B9A B3ID \n");
         return handle_close(map);
-    }
 
     if (keycode == KEY_W)
         map->keys.w = 1;
@@ -132,7 +126,6 @@ int handle_key_press(int keycode, t_map *map)
 }
 void setup_events(t_map *map)
 {
-    printf("Setting up events o bottonat o kda handlers...\n");
     mlx_hook(map->win, 2, 1L << 0, handle_key_press, map);
     mlx_hook(map->win, 3, 1L << 1, handle_key_release, map);
     mlx_hook(map->win, 17, 1L << 17, handle_close, map);

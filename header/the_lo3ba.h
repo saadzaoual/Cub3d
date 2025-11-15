@@ -72,12 +72,12 @@ typedef struct s_map
     int     img_size_line;
     int     img_endian;
     char    **map;
-    char    *no_texture;    // North wall texture path
-    char    *so_texture;    // South wall texture path
-    char    *we_texture;    // West wall texture path
-    char    *ea_texture;    // East wall texture path
-    char    *floor_color;   // Floor color string (R,G,B)
-    char    *ceiling_color; // Ceiling color string (R,G,B)
+    char    *no_texture;    
+    char    *so_texture;    
+    char    *we_texture;    
+    char    *ea_texture;    
+    char    *floor_color; 
+    char    *ceiling_color; 
     int     width;
     int     height;
     t_ray   rays[RAY_NUM];

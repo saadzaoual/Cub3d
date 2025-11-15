@@ -30,7 +30,7 @@ void clear_player_area(t_map *map)
 
             if (tile_x >= 0 && tile_x < map->width && tile_y >= 0 && tile_y < map->height)
             {
-                /* Safety: check that line exists and is long enough before accessing */
+                
                 if (map->map[tile_y] && map->map[tile_y][tile_x] && 
                     map->map[tile_y][tile_x] != '\n' && map->map[tile_y][tile_x] != '\r')
                 {
@@ -55,13 +55,40 @@ void clear_player_area(t_map *map)
 
 int handle_close(t_map *map)
 {
-    if (map->win)
+    if (!map)
+        exit(0);
+
+    if (map->no_texture)
+        free(map->no_texture);
+    if (map->so_texture)
+        free(map->so_texture);
+    if (map->we_texture)
+        free(map->we_texture);
+    if (map->ea_texture)
+        free(map->ea_texture);
+    if (map->floor_color)
+        free(map->floor_color);
+    if (map->ceiling_color)
+        free(map->ceiling_color);
+
+    if (map->map)
+    {
+        for (int i = 0; i < map->height && map->map[i]; i++)
+            free(map->map[i]);
+        free(map->map);
+    }
+
+    if (map->img && map->mlx)
+        mlx_destroy_image(map->mlx, map->img);
+    if (map->win && map->mlx)
         mlx_destroy_window(map->mlx, map->win);
     if (map->mlx)
     {
         mlx_destroy_display(map->mlx);
         free(map->mlx);
     }
+
+    free(map);
     exit(0);
     return 0;
 }
@@ -70,21 +97,18 @@ int is_valid_move(t_map *map, int new_x, int new_y)
 {
     int tile_x, tile_y;
 
-    // Simple approach: just check the center tile of the player
     tile_x = (new_x + PLAYER_OFFSET + PLAYER_SIZE / 2) / TILE;
     tile_y = (new_y + PLAYER_OFFSET + PLAYER_SIZE / 2) / TILE;
 
-    // Check bounds
     if (tile_x < 0 || tile_x >= map->width ||
         tile_y < 0 || tile_y >= map->height)
         return 0;
 
-    /* Safety: check that line exists and is long enough */
+    
     if (!map->map[tile_y] || !map->map[tile_y][tile_x] || 
         map->map[tile_y][tile_x] == '\n' || map->map[tile_y][tile_x] == '\r')
-        return 0;  /* Treat as wall if out of bounds */
+        return 0;  
 
-    // Check if center tile is free (not a wall or space)
     if (map->map[tile_y][tile_x] == '1' || map->map[tile_y][tile_x] == ' ')
         return 0;
 

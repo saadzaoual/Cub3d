@@ -12,9 +12,7 @@
 
 #include "../header/the_lo3ba.h"
 
-// Prototypes
 
-// Calculate the map height by reading from the map file (.cub)
 int map_height(char *av)
 {
     int fd;
@@ -48,7 +46,6 @@ t_map *init_map_height(int h)
     if (!map)
         exit(1);
 
-    // init map o dkchi
     map->height = h;
     map->width = 0;
     map->mlx = NULL;
@@ -63,6 +60,13 @@ t_map *init_map_height(int h)
     map->player.angle = 0.0;
     map->player_set = 0;
 
+    map->keys.w = 0;
+    map->keys.a = 0;
+    map->keys.s = 0;
+    map->keys.d = 0;
+    map->keys.left = 0;
+    map->keys.right = 0;
+
     i = 0;
     while (i < RAY_NUM)
     {
@@ -73,7 +77,6 @@ t_map *init_map_height(int h)
         i++;
     }
 
-    // Allocate map array
     map->map = malloc(sizeof(char *) * (h + 1));
     if (!map->map)
     {
@@ -110,7 +113,6 @@ void fill_map_content(t_map *map, char *av)
         row++;
     }
 
-    // Clean up any extra lines after map
     line = get_next_line(fd);
     if (line)
         free(line);

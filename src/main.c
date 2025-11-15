@@ -56,21 +56,17 @@ char	*extract_path(char *line)
 	if (!line)
 		return (NULL);
 	
-	// Skip the identifier (NO, SO, WE, EA)
 	while (*line && *line != ' ' && *line != '\t')
 		line++;
 	
-	// Skip spaces
 	line = skip_spaces(line);
 	if (!*line)
 		return (NULL);
 	
-	// Find end of path (before newline or end of string)
 	end = line;
 	while (*end && *end != '\n' && *end != '\r')
 		end++;
 	
-	// Remove trailing spaces
 	while (end > line && (*(end - 1) == ' ' || *(end - 1) == '\t'))
 		end--;
 	
@@ -105,7 +101,6 @@ int	validate_color_format(char *color_str)
 	commas = 0;
 	num_count = 0;
 	
-	// Count commas and check format
 	while (color_str[i])
 	{
 		if (color_str[i] == ',')
@@ -113,21 +108,18 @@ int	validate_color_format(char *color_str)
 		else if (color_str[i] >= '0' && color_str[i] <= '9')
 			num_count++;
 		else if (color_str[i] != ' ' && color_str[i] != '\t')
-			return (0); // Invalid character
+			return (0);
 		i++;
 	}
 	
 	if (commas != 2 || num_count < 3)
 		return (0);
 	
-	// Parse and validate RGB values (skip spaces around numbers and commas)
 	char *ptr = color_str;
 	
-	// Skip leading spaces
 	while (*ptr && (*ptr == ' ' || *ptr == '\t'))
 		ptr++;
 	
-	// Parse R
 	r = 0;
 	int has_digits = 0;
 	while (*ptr && *ptr >= '0' && *ptr <= '9')
@@ -137,17 +129,14 @@ int	validate_color_format(char *color_str)
 	}
 	if (!has_digits || r > 255) return (0);
 	
-	// Skip spaces before comma
 	while (*ptr && (*ptr == ' ' || *ptr == '\t'))
 		ptr++;
 	if (*ptr != ',') return (0);
 	ptr++;
 	
-	// Skip spaces after comma
 	while (*ptr && (*ptr == ' ' || *ptr == '\t'))
 		ptr++;
 	
-	// Parse G
 	g = 0;
 	has_digits = 0;
 	while (*ptr && *ptr >= '0' && *ptr <= '9')
@@ -157,17 +146,14 @@ int	validate_color_format(char *color_str)
 	}
 	if (!has_digits || g > 255) return (0);
 	
-	// Skip spaces before comma
 	while (*ptr && (*ptr == ' ' || *ptr == '\t'))
 		ptr++;
 	if (*ptr != ',') return (0);
 	ptr++;
 	
-	// Skip spaces after comma
 	while (*ptr && (*ptr == ' ' || *ptr == '\t'))
 		ptr++;
 	
-	// Parse B
 	b = 0;
 	has_digits = 0;
 	while (*ptr && *ptr >= '0' && *ptr <= '9')
@@ -241,14 +227,12 @@ int	parse_map_config(t_map *map)
 	{
 		line = skip_spaces(map->map[i]);
 		
-		// Skip empty lines
 		if (!*line || *line == '\n')
 		{
 			i++;
 			continue;
 		}
 		
-		// Parse texture identifiers (with duplicate check)
 		if (ft_strncmp(line, "NO ", 3) == 0)
 		{
 			if (map->no_texture)
@@ -305,7 +289,7 @@ int	parse_map_config(t_map *map)
 		}
 		else if (*line == '1' || *line == '0')
 		{
-			// This is the start of the actual map
+		
 			break;
 		}
 		
@@ -341,7 +325,6 @@ static void cleanup_map(t_map *map)
         }
         free(map->map);
     }
-
 
     if (map->img && map->mlx)
         mlx_destroy_image(map->mlx, map->img);
@@ -395,7 +378,6 @@ int	read_file(t_map *map, char *filename)
 	if (line_count == 0)
 		return (0);
 	
-
 	map->map_fd = open(filename, O_RDONLY);
 	if (map->map_fd < 0)
 		return (0);
@@ -417,14 +399,9 @@ int	read_file(t_map *map, char *filename)
 
 	close(map->map_fd);
 
-	/* Keep the full file content (headers + map). We'll let the caller
-	   (main) trim the header after parsing textures so both parsing
-	   and the final map grid are correct. */
 	map->map = file_content;
 	map->height = i;
 
-	/* Compute a conservative width (max line length) for now; the true
-	   grid width will be computed after trimming header lines in main. */
 	map->width = 0;
 	for (int j = 0; j < i; j++)
 	{
@@ -438,33 +415,29 @@ int	read_file(t_map *map, char *filename)
 	return (1);
 }
 
-/* Helper function to get character at position, treating out-of-bounds and
-   missing characters as empty space (potential escape route) */
 static char get_map_char(t_map *map, int x, int y)
 {
 	if (y < 0 || y >= map->height)
-		return '\0';  /* Out of bounds vertically */
+		return '\0';  
 	if (!map->map[y])
-		return '\0';  /* Line doesn't exist */
+		return '\0';  
 	if (x < 0)
-		return '\0';  /* Out of bounds left */
+		return '\0';  
 	
-	/* Check if x is beyond the line length */
 	int len = 0;
 	while (map->map[y][len] && map->map[y][len] != '\n' && map->map[y][len] != '\r')
 		len++;
 	
 	if (x >= len)
-		return '\0';  /* Beyond line end - this is an opening! */
+		return '\0';  
 	
 	return map->map[y][x];
 }
 
-/* Flood fill to check if player can reach map boundaries.
-   Returns 1 if map is closed (valid), 0 if player can escape. */
+
 static int check_map_closed(t_map *map, int start_x, int start_y)
 {
-	/* Create a visited array */
+	
 	char **visited = malloc(sizeof(char *) * map->height);
 	if (!visited)
 		return 0;
@@ -481,7 +454,6 @@ static int check_map_closed(t_map *map, int start_x, int start_y)
 		}
 	}
 	
-	/* Simple stack-based flood fill */
 	typedef struct s_point {
 		int x, y;
 	} t_point;
@@ -499,25 +471,22 @@ static int check_map_closed(t_map *map, int start_x, int start_y)
 	stack[stack_size++] = (t_point){start_x, start_y};
 	visited[start_y][start_x] = 1;
 	
-	int is_closed = 1;  /* Assume closed until we find an escape */
+	int is_closed = 1;  
 	
 	while (stack_size > 0)
 	{
 		t_point p = stack[--stack_size];
 		
-		/* Check if we reached a boundary (escape!) */
 		char c = get_map_char(map, p.x, p.y);
 		if (c == '\0')
 		{
-			is_closed = 0;  /* Found an escape route to the boundary! */
+			is_closed = 0;  
 			break;
 		}
 		
-		/* Skip walls (they block movement) */
 		if (c == '1')
 			continue;
 		
-		/* Try all 4 directions */
 		int dx[] = {0, 1, 0, -1};
 		int dy[] = {-1, 0, 1, 0};
 		
@@ -526,15 +495,14 @@ static int check_map_closed(t_map *map, int start_x, int start_y)
 			int nx = p.x + dx[i];
 			int ny = p.y + dy[i];
 			
-			/* Check bounds for visited array */
 			if (ny < 0 || ny >= map->height || nx < 0 || nx >= map->width)
 			{
-				/* Trying to go out of visited bounds - need to check if it's an escape */
+				
 				char nc = get_map_char(map, nx, ny);
 				if (nc == '\0')
 				{
-					is_closed = 0;  /* Can escape to boundary! */
-					stack_size = 0;  /* Break outer loop */
+					is_closed = 0;  
+					stack_size = 0;  
 					break;
 				}
 				continue;
@@ -548,7 +516,6 @@ static int check_map_closed(t_map *map, int start_x, int start_y)
 		}
 	}
 	
-	/* Cleanup */
 	free(stack);
 	for (int i = 0; i < map->height; i++)
 		free(visited[i]);
@@ -557,14 +524,11 @@ static int check_map_closed(t_map *map, int start_x, int start_y)
 	return is_closed;
 }
 
-/* Check that all edges of the map are surrounded by walls ('1').
-   This ensures map integrity regardless of reachability. */
 int check_map_borders(t_map *map)
 {
 	if (!map || !map->map || map->height == 0)
 		return 0;
 
-	/* Check first and last rows - all non-space characters must be '1' */
 	for (int x = 0; map->map[0][x] && map->map[0][x] != '\n' && map->map[0][x] != '\r'; x++)
 	{
 		char c = map->map[0][x];
@@ -585,7 +549,6 @@ int check_map_borders(t_map *map)
 		}
 	}
 
-	/* Check first and last character of each row (excluding empty space padding) */
 	for (int y = 0; y < map->height; y++)
 	{
 		if (!map->map[y])
@@ -598,24 +561,20 @@ int check_map_borders(t_map *map)
 		if (len == 0)
 			continue;
 
-		/* Find first non-space character */
 		int first_char = 0;
 		while (first_char < len && (map->map[y][first_char] == ' ' || map->map[y][first_char] == '\t'))
 			first_char++;
 		
-		/* Find last non-space character */
 		int last_char = len - 1;
 		while (last_char >= 0 && (map->map[y][last_char] == ' ' || map->map[y][last_char] == '\t'))
 			last_char--;
 		
-		/* Check if first non-space char is a wall */
 		if (first_char < len && map->map[y][first_char] != '1')
 		{
 			printf("Error\nRow %d must start with a wall ('1'), found '%c'\n", y, map->map[y][first_char]);
 			return 0;
 		}
 		
-		/* Check if last non-space char is a wall */
 		if (last_char >= 0 && map->map[y][last_char] != '1')
 		{
 			printf("Error\nRow %d must end with a wall ('1'), found '%c'\n", y, map->map[y][last_char]);
@@ -626,17 +585,13 @@ int check_map_borders(t_map *map)
 	return 1;
 }
 
-/* Validate map grid characters and locate player spawn.
-   Allowed characters in the grid: '1', '0', and exactly one of 'N','S','W','E'.
-   The function sets map->player.player_x/player_y and player.angle and
-   replaces the spawn char in the map with '0'. Returns 1 on success, 0 on error. */
 int validate_and_set_player(t_map *map)
 {
 	if (!map || !map->map)
 		return 0;
 
 	int player_count = 0;
-	int player_x = -1, player_y = -1;  /* Track player grid position for flood fill */
+	int player_x = -1, player_y = -1;  
 	
 	for (int y = 0; y < map->height; y++)
 	{
@@ -646,11 +601,11 @@ int validate_and_set_player(t_map *map)
 			char c = map->map[y][x];
 			if (c == '1' || c == '0')
 			{
-				/* ok */
+				
 			}
 			else if (c == ' ' || c == '\t')
 			{
-				/* Convert spaces and tabs to floor tiles '0' */
+				
 				map->map[y][x] = '0';
 			}
 			else if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
@@ -662,25 +617,22 @@ int validate_and_set_player(t_map *map)
 					cleanup_map(map);
 					exit(1);
 				}
-				/* Save player grid position for flood fill check */
+				
 				player_x = x;
 				player_y = y;
 				
-				/* Set player position to center of tile */
 				map->player.player_x = x * TILE + TILE / 2;
 				map->player.player_y = y * TILE + TILE / 2;
 
-				/* Set player angle: 0=E, 90=S, 180=W, 270=N (degrees) */
 				if (c == 'N')
 					map->player.angle = 270.0;
 				else if (c == 'S')
 					map->player.angle = 90.0;
 				else if (c == 'W')
 					map->player.angle = 180.0;
-				else /* 'E' */
+				else 
 					map->player.angle = 0.0;
 
-				/* Replace spawn char with free space */
 				map->map[y][x] = '0';
 				map->player_set = 1;
 			}
@@ -701,7 +653,6 @@ int validate_and_set_player(t_map *map)
 		exit(1);
 	}
 
-	/* Flood fill check: ensure the map is closed and player cannot escape */
 	if (!check_map_closed(map, player_x, player_y))
 	{
 		printf("Error\nMap is not closed - player can escape to the outside\n");
@@ -729,8 +680,6 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	
-	/* Initialize all pointers to NULL so cleanup_map can safely check them.
-	   This prevents crashes when validation fails before MLX is initialized. */
 	map->map = NULL;
 	map->map_fd = -1;
 	map->no_texture = NULL;
@@ -743,6 +692,13 @@ int	main(int ac, char **av)
 	map->win = NULL;
 	map->img = NULL;
 	map->img_data = NULL;
+	
+	map->keys.w = 0;
+	map->keys.a = 0;
+	map->keys.s = 0;
+	map->keys.d = 0;
+	map->keys.left = 0;
+	map->keys.right = 0;
 	
 	if (!check_and_open_file(av[1], map))
 	{
@@ -765,31 +721,13 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	
-	// Validate that all required elements are present and valid
 	if (!validate_parsing_completeness(map))
 	{
 		printf("Error\nMap configuration is incomplete or invalid\n");
 		cleanup_map(map);
 		return (1);
 	}
-	
-	printf("NO: %s\n", map->no_texture ? map->no_texture : "NULL");
-	printf("SO: %s\n", map->so_texture ? map->so_texture : "NULL");
-	printf("WE: %s\n", map->we_texture ? map->we_texture : "NULL");
-	printf("EA: %s\n", map->ea_texture ? map->ea_texture : "NULL");
-	printf("F: %s\n", map->floor_color ? map->floor_color : "NULL");
-	printf("C: %s\n", map->ceiling_color ? map->ceiling_color : "NULL");
 
-	/* Debug: print detected map dimensions */
-	printf("Map dimensions: height=%d width=%d\n", map->height, map->width);
-	/* Optionally print the map lines (first 20 lines max) for quick verification */
-	for (int li = 0; li < map->height && li < 20; li++)
-		printf("%2d: %s", li, map->map[li]);
-    
-	/* Now that parsing is done, extract only the actual grid rows (lines
-	   starting with '1' or '0') into map->map so rendering and player
-	   setup iterate the grid directly. This keeps header parsing and the
-	   game grid separate. */
 	int start_idx = 0;
 	while (start_idx < map->height)
 	{
@@ -805,20 +743,17 @@ int	main(int ac, char **av)
 		return (1);
 	}
 
-	/* Find the end of the map grid (last non-empty map line) */
 	int end_idx = start_idx;
 	int last_map_line = start_idx;
 	while (end_idx < map->height)
 	{
 		char *s = skip_spaces(map->map[end_idx]);
-		/* Map lines must start with '1' or '0' */
+
 		if (s && (*s == '1' || *s == '0'))
 			last_map_line = end_idx;
 		else if (s && *s != '\0')
 		{
-			/* Non-empty line that doesn't start with '1' or '0' after map started */
-			/* This is only allowed if we haven't found any map lines yet (still in header) */
-			/* But since we're past start_idx, this is invalid extra content */
+
 			printf("Error\nInvalid content after map grid at line %d\n", end_idx);
 			cleanup_map(map);
 			return (1);
@@ -838,14 +773,13 @@ int	main(int ac, char **av)
 		grid[k] = map->map[start_idx + k];
 	grid[map_lines] = NULL;
 
-	/* Free header lines and the original array container */
 	for (int k = 0; k < start_idx; k++)
 		free(map->map[k]);
 	free(map->map);
 
 	map->map = grid;
 	map->height = map_lines;
-	/* recompute width from grid */
+
 	map->width = 0;
 	for (int j = 0; j < map->height; j++)
 	{
@@ -856,14 +790,12 @@ int	main(int ac, char **av)
 			map->width = len;
 	}
 
-	/* Check that all map borders are surrounded by walls */
 	if (!check_map_borders(map))
 	{
 		cleanup_map(map);
 		return (1);
 	}
 
-	/* Validate that the grid contains only allowed characters and set player */
 	if (!validate_and_set_player(map))
 	{
 		cleanup_map(map);

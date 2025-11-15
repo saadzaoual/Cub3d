@@ -12,7 +12,6 @@
 
 #include "../header/the_lo3ba.h"
 
-// Validate the map structure
 static void validate_map(t_map *map)
 {
     if (!map || !map->map || map->height <= 0)
@@ -30,7 +29,6 @@ static void validate_map(t_map *map)
     printf("Map loaded: %dx%d\n", map->width, map->height);
 }
 
-// Filling the map from the file
 t_map *fill_map(char *av)
 {
     t_map *map;
@@ -54,7 +52,6 @@ t_map *fill_map(char *av)
 
     map->width = ft_strlen1(map->map[0]);
 
-    // Validate map before returning
     validate_map(map);
 
     return map;

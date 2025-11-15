@@ -16,7 +16,6 @@
 t_ray cast_single_ray_3d(t_map *game, double ray_angle)
 {
     t_ray ray = {0};
-    // hona kaman nahtajo struct ofc wtf man 
     double ray_x;
     double ray_y;
     double ray_angle_rad;
@@ -36,7 +35,6 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
     double angle_diff;
     double corrected_distance;
 
-    // Initialize variables
     ray_x = game->player.player_x + PLAYER_OFFSET + PLAYER_SIZE / 2.0;
     ray_y = game->player.player_y + PLAYER_OFFSET + PLAYER_SIZE / 2.0;
 
@@ -81,28 +79,28 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
         {
             side_dist_x += delta_dist_x;
             map_x += step_x;
-            side = 0; // Vertical wall
+            side = 0;
         }
         else
         {
             side_dist_y += delta_dist_y;
             map_y += step_y;
-            side = 1; // Horizontal wall
+            side = 1;
         }
 
         if (map_y >= 0 && map_y < game->height && map_x >= 0 && map_x < game->width)
         {
-            /* Safety check: ensure the string is long enough before accessing */
+            
             if (game->map[map_y] && game->map[map_y][map_x] && 
                 game->map[map_y][map_x] != '\n' && game->map[map_y][map_x] != '\r')
             {
-                /* Treat walls ('1') and spaces (' ') as solid walls */
+                
                 if (game->map[map_y][map_x] == '1' || game->map[map_y][map_x] == ' ')
                     hit = 1;
             }
             else
             {
-                /* Treat out-of-bounds or short lines as walls to prevent crashes */
+                
                 hit = 1;
             }
         }
@@ -138,7 +136,6 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
 
 
 
-// 3D rendering function
 void render_3d_view(t_map *game)
 {
 
@@ -147,9 +144,9 @@ void render_3d_view(t_map *game)
         for (int x = 0; x < SCREEN_WIDTH; x++)
         {
             if (y < SCREEN_HEIGHT / 2)
-                pixel_put_img(game, x, y, 0x87CEEB); // Sky blue ceiling
+                pixel_put_img(game, x, y, 0x87CEEB);
             else
-                pixel_put_img(game, x, y, 0x8B4513); // Brown floor
+                pixel_put_img(game, x, y, 0x8B4513);
         }
     }
     
@@ -177,12 +174,12 @@ void render_3d_view(t_map *game)
             if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
             
             int color;
-            if (ray.hit_side == 0) // Vertical wall
-                color = 0x404040; // White
-            else // Horizontal wall  
-                color = 0x404040; // Light gray (darker for shading)
+            if (ray.hit_side == 0)
+                color = 0x404040;
+            else
+                color = 0x404040;
             
-            // Draw the wall slice
+          
             for (int y = draw_start; y <= draw_end; y++)
             {
                 pixel_put_img(game, x, y, color);
