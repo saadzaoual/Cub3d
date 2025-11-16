@@ -23,8 +23,8 @@
 # define PLAYER_SIZE 8
 # define PLAYER_OFFSET 12
 
-# define SCREEN_WIDTH 800
-# define SCREEN_HEIGHT 520
+# define SCREEN_WIDTH 1500
+# define SCREEN_HEIGHT 800
 # define WALL_HEIGHT_FACTOR 100
 
 # define KEY_ESC 65307
@@ -61,6 +61,17 @@ typedef struct s_key_state
     int esc;
 }   t_key_state;
 
+typedef struct s_texture
+{
+    void    *img;
+    char    *data;
+    int     width;
+    int     height;
+    int     bpp;
+    int     size_line;
+    int     endian;
+}   t_texture;
+
 typedef struct s_map
 {
     int map_fd;
@@ -77,7 +88,13 @@ typedef struct s_map
     char    *we_texture;    
     char    *ea_texture;    
     char    *floor_color; 
-    char    *ceiling_color; 
+    char    *ceiling_color;
+    int     floor_rgb;
+    int     ceiling_rgb;
+    t_texture north_tex;
+    t_texture south_tex;
+    t_texture west_tex;
+    t_texture east_tex;
     int     width;
     int     height;
     t_ray   rays[RAY_NUM];
@@ -93,6 +110,9 @@ int     update_player(t_map *map);
 void    setup_events(t_map *map);
 
 int     validate_and_set_player(t_map *map);
+int     parse_rgb_color(char *color_str);
+int     load_textures(t_map *map);
+int     get_texture_pixel(t_texture *tex, int x, int y);
 
 
 

@@ -138,16 +138,22 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
 
 void render_3d_view(t_map *game)
 {
+    int x;
+    int y;
 
-    for (int y = 0; y < SCREEN_HEIGHT; y++)
+    y = 0;
+    while (y < SCREEN_HEIGHT)
     {
-        for (int x = 0; x < SCREEN_WIDTH; x++)
+        x = 0;
+        while (x < SCREEN_WIDTH)
         {
             if (y < SCREEN_HEIGHT / 2)
-                pixel_put_img(game, x, y, 0x87CEEB);
+                pixel_put_img(game, x, y, game->ceiling_rgb);
             else
-                pixel_put_img(game, x, y, 0x8B4513);
+                pixel_put_img(game, x, y, game->floor_rgb);
+            x++;
         }
+        y++;
     }
     
     double fov = 60.0;
@@ -169,20 +175,52 @@ void render_3d_view(t_map *game)
             
             int draw_start = (SCREEN_HEIGHT - wall_height) / 2;
             int draw_end = draw_start + wall_height;
+            
+            int original_draw_start = draw_start;
 
             if (draw_start < 0) draw_start = 0;
             if (draw_end >= SCREEN_HEIGHT) draw_end = SCREEN_HEIGHT - 1;
             
-            int color;
-            if (ray.hit_side == 0)
-                color = 0x404040;
-            else
-                color = 0x404040;
+            t_texture *texture;
+            double wall_hit_pos;
             
-          
+            if (ray.hit_side == 0)
+            {
+                wall_hit_pos = ray.wall_y;
+                if (cos(DEG_TO_RAD(current_angle)) > 0)
+                    texture = &game->east_tex;
+                else
+                    texture = &game->west_tex;
+            }
+            else
+            {
+                wall_hit_pos = ray.wall_x;
+                if (sin(DEG_TO_RAD(current_angle)) > 0)
+                    texture = &game->south_tex;
+                else
+                    texture = &game->north_tex;
+            }
+            
+            int tex_x = (int)(wall_hit_pos) % TILE;
+            if (tex_x < 0)
+                tex_x += TILE;
+            tex_x = (tex_x * texture->width) / TILE;
+            
+            double step = (double)texture->height / wall_height;
+            double tex_pos = (draw_start - original_draw_start) * step;
+            
             for (int y = draw_start; y <= draw_end; y++)
             {
+                int tex_y = (int)tex_pos;
+                if (tex_y >= texture->height)
+                    tex_y = texture->height - 1;
+                if (tex_y < 0)
+                    tex_y = 0;
+                    
+                int color = get_texture_pixel(texture, tex_x, tex_y);
                 pixel_put_img(game, x, y, color);
+                
+                tex_pos += step;
             }
         }
     }

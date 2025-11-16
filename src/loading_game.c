@@ -124,6 +124,12 @@ void load_game(t_map *map)
     if (!init_mlx_connection(map))
         exit(1);
     
+    if (!load_textures(map))
+    {
+        printf("Error: Failed to load textures\n");
+        exit(1);
+    }
+    
     if (!init_rendering(map))
         exit(1);
     

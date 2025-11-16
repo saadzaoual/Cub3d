@@ -78,12 +78,20 @@ int handle_close(t_map *map)
         free(map->map);
     }
 
-    if (map->img && map->mlx)
-        mlx_destroy_image(map->mlx, map->img);
-    if (map->win && map->mlx)
-        mlx_destroy_window(map->mlx, map->win);
     if (map->mlx)
     {
+        if (map->north_tex.img)
+            mlx_destroy_image(map->mlx, map->north_tex.img);
+        if (map->south_tex.img)
+            mlx_destroy_image(map->mlx, map->south_tex.img);
+        if (map->west_tex.img)
+            mlx_destroy_image(map->mlx, map->west_tex.img);
+        if (map->east_tex.img)
+            mlx_destroy_image(map->mlx, map->east_tex.img);
+        if (map->img)
+            mlx_destroy_image(map->mlx, map->img);
+        if (map->win)
+            mlx_destroy_window(map->mlx, map->win);
         mlx_destroy_display(map->mlx);
         free(map->mlx);
     }
