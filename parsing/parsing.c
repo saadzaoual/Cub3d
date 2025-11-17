@@ -47,15 +47,25 @@ char	*skip_spaces(char *str)
 	return (str);
 }
 
-static int	file_exists(const char *path)
+static int	is_valid_xpm_path(const char *path)
 {
-	int	fd;
+	int		len;
+	int		fd;
+	char	buf[1];
 
 	if (!path)
+		return (0);
+	len = ft_strlen1((char *)path);
+	if (len < 5 || ft_strncmp(path + len - 4, ".xpm", 4) != 0)
 		return (0);
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 		return (0);
+	if (read(fd, buf, 1) <= 0)
+	{
+		close(fd);
+		return (0);
+	}
 	close(fd);
 	return (1);
 }
@@ -188,9 +198,9 @@ int	validate_parsing_completeness(t_map *map)
 		printf("Error: Missing NO (North) texture\n");
 		errors++;
 	}
-	else if (!file_exists(map->no_texture))
+	else if (!is_valid_xpm_path(map->no_texture))
 	{
-		printf("Error: NO texture file not found: %s\n", map->no_texture);
+		printf("Error: NO texture invalid or not found: %s\n", map->no_texture);
 		errors++;
 	}
 	if (!map->so_texture)
@@ -198,9 +208,9 @@ int	validate_parsing_completeness(t_map *map)
 		printf("Error: Missing SO (South) texture\n");
 		errors++;
 	}
-	else if (!file_exists(map->so_texture))
+	else if (!is_valid_xpm_path(map->so_texture))
 	{
-		printf("Error: SO texture file not found: %s\n", map->so_texture);
+		printf("Error: SO texture invalid or not found: %s\n", map->so_texture);
 		errors++;
 	}
 	if (!map->we_texture)
@@ -208,9 +218,9 @@ int	validate_parsing_completeness(t_map *map)
 		printf("Error: Missing WE (West) texture\n");
 		errors++;
 	}
-	else if (!file_exists(map->we_texture))
+	else if (!is_valid_xpm_path(map->we_texture))
 	{
-		printf("Error: WE texture file not found: %s\n", map->we_texture);
+		printf("Error: WE texture invalid or not found: %s\n", map->we_texture);
 		errors++;
 	}
 	if (!map->ea_texture)
@@ -218,9 +228,9 @@ int	validate_parsing_completeness(t_map *map)
 		printf("Error: Missing EA (East) texture\n");
 		errors++;
 	}
-	else if (!file_exists(map->ea_texture))
+	else if (!is_valid_xpm_path(map->ea_texture))
 	{
-		printf("Error: EA texture file not found: %s\n", map->ea_texture);
+		printf("Error: EA texture invalid or not found: %s\n", map->ea_texture);
 		errors++;
 	}
 	if (!map->floor_color)
@@ -270,8 +280,8 @@ int	parse_map_config(t_map *map)
 		{
 			if (map->no_texture)
 			{
-				printf("Warning: Duplicate NO texture found\n");
-				free(map->no_texture);
+				printf("Error\nDuplicate NO texture found\n");
+				return (0);
 			}
 			map->no_texture = extract_path(line);
 		}
@@ -279,8 +289,8 @@ int	parse_map_config(t_map *map)
 		{
 			if (map->so_texture)
 			{
-				printf("Warning: Duplicate SO texture found\n");
-				free(map->so_texture);
+				printf("Error\nDuplicate SO texture found\n");
+				return (0);
 			}
 			map->so_texture = extract_path(line);
 		}
@@ -288,8 +298,8 @@ int	parse_map_config(t_map *map)
 		{
 			if (map->we_texture)
 			{
-				printf("Warning: Duplicate WE texture found\n");
-				free(map->we_texture);
+				printf("Error\nDuplicate WE texture found\n");
+				return (0);
 			}
 			map->we_texture = extract_path(line);
 		}
@@ -297,8 +307,8 @@ int	parse_map_config(t_map *map)
 		{
 			if (map->ea_texture)
 			{
-				printf("Warning: Duplicate EA texture found\n");
-				free(map->ea_texture);
+				printf("Error\nDuplicate EA texture found\n");
+				return (0);
 			}
 			map->ea_texture = extract_path(line);
 		}
@@ -306,8 +316,8 @@ int	parse_map_config(t_map *map)
 		{
 			if (map->floor_color)
 			{
-				printf("Warning: Duplicate F color found\n");
-				free(map->floor_color);
+				printf("Error\nDuplicate F color found\n");
+				return (0);
 			}
 			map->floor_color = extract_path(line);
 		}
@@ -315,8 +325,8 @@ int	parse_map_config(t_map *map)
 		{
 			if (map->ceiling_color)
 			{
-				printf("Warning: Duplicate C color found\n");
-				free(map->ceiling_color);
+				printf("Error\nDuplicate C color found\n");
+				return (0);
 			}
 			map->ceiling_color = extract_path(line);
 		}

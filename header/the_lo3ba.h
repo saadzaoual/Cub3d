@@ -17,7 +17,7 @@
 # define PLAYER_COLOR 0x00FF00
 # define COLOR_WALL 0x4B0082
 # define COLOR_FREE 0x006600
-# define ROTATION_SPEED 0.5
+# define ROTATION_SPEED 1
 
 # define MOVE_SPEED 1
 # define PLAYER_SIZE 8

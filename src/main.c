@@ -175,15 +175,29 @@ int	main(int ac, char **av)
 
 	int end_idx = start_idx;
 	int last_map_line = start_idx;
+	int found_empty_after_map = 0;
+	
 	while (end_idx < map->height)
 	{
 		char *s = skip_spaces(map->map[end_idx]);
 
 		if (s && (*s == '1' || *s == '0'))
+		{
+			if (found_empty_after_map)
+			{
+				printf("Error\nDuplicate map found at line %d\n", end_idx);
+				cleanup_map(map);
+				return (1);
+			}
 			last_map_line = end_idx;
+		}
+		else if (s && (*s == '\0' || *s == '\n' || *s == '\r'))
+		{
+			if (last_map_line >= start_idx)
+				found_empty_after_map = 1;
+		}
 		else if (s && *s != '\0')
 		{
-
 			printf("Error\nInvalid content after map grid at line %d\n", end_idx);
 			cleanup_map(map);
 			return (1);
@@ -204,6 +218,8 @@ int	main(int ac, char **av)
 	grid[map_lines] = NULL;
 
 	for (int k = 0; k < start_idx; k++)
+		free(map->map[k]);
+	for (int k = last_map_line + 1; k < map->height; k++)
 		free(map->map[k]);
 	free(map->map);
 
