@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting_algo.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abnemili <abnemili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 10:47:23 by abnemili          #+#    #+#             */
-/*   Updated: 2025/09/02 13:20:03 by abnemili         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:02:07 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
     ray_x = game->player.player_x + PLAYER_OFFSET + PLAYER_SIZE / 2.0;
     ray_y = game->player.player_y + PLAYER_OFFSET + PLAYER_SIZE / 2.0;
 
-    ray_angle_rad = DEG_TO_RAD(ray_angle);
+    ray_angle_rad = deg_to_rad(ray_angle);
     ray_dx = cos(ray_angle_rad);
     ray_dy = sin(ray_angle_rad);
 
@@ -121,7 +121,7 @@ t_ray cast_single_ray_3d(t_map *game, double ray_angle)
             ray.wall_x = ray_x + raw_distance * ray_dx * TILE;
         }
 
-        angle_diff = DEG_TO_RAD(ray_angle - game->player.angle);
+        angle_diff = deg_to_rad(ray_angle - game->player.angle);
         while (angle_diff > M_PI) angle_diff -= 2 * M_PI;
         while (angle_diff < -M_PI) angle_diff += 2 * M_PI;
 
@@ -187,7 +187,7 @@ void render_3d_view(t_map *game)
             if (ray.hit_side == 0)
             {
                 wall_hit_pos = ray.wall_y;
-                if (cos(DEG_TO_RAD(current_angle)) > 0)
+                if (cos(deg_to_rad(current_angle)) > 0)
                     texture = &game->east_tex;
                 else
                     texture = &game->west_tex;
@@ -195,7 +195,7 @@ void render_3d_view(t_map *game)
             else
             {
                 wall_hit_pos = ray.wall_x;
-                if (sin(DEG_TO_RAD(current_angle)) > 0)
+                if (sin(deg_to_rad(current_angle)) > 0)
                     texture = &game->south_tex;
                 else
                     texture = &game->north_tex;

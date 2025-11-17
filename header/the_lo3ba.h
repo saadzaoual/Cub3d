@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   the_lo3ba.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/17 00:00:00 by szaoual           #+#    #+#             */
+/*   Updated: 2025/11/17 20:02:07 by szaoual          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef THE_LO3BA_H
 # define THE_LO3BA_H
 
@@ -12,144 +24,126 @@
 
 # define TILE 64
 # define M_PI 3.14159265358979323846
-# define DEG_TO_RAD(angleDegrees) ((angleDegrees) * M_PI / 180.0)
-
 # define PLAYER_COLOR 0x00FF00
 # define COLOR_WALL 0x4B0082
 # define COLOR_FREE 0x006600
 # define ROTATION_SPEED 1
-
 # define MOVE_SPEED 1
 # define PLAYER_SIZE 8
 # define PLAYER_OFFSET 12
-
 # define SCREEN_WIDTH 1500
 # define SCREEN_HEIGHT 800
 # define WALL_HEIGHT_FACTOR 100
-
 # define KEY_ESC 65307
 # define KEY_W 119
 # define KEY_S 115
 # define KEY_A 97
 # define KEY_D 100
-
 # define RAY_NUM 320
 
 typedef struct s_ray
 {
-    double wall_x;
-    double wall_y;
-    double distance;
-    int hit_side;
-}   t_ray;
+	double	wall_x;
+	double	wall_y;
+	double	distance;
+	int		hit_side;
+}	t_ray;
 
 typedef struct s_player
 {
-    double player_x;
-    double player_y;
-    double angle;
-}   t_player;
+	double	player_x;
+	double	player_y;
+	double	angle;
+}	t_player;
 
 typedef struct s_key_state
 {
-    int w;
-    int a;
-    int s;
-    int d;
-    int left;
-    int right;
-    int esc;
-}   t_key_state;
+	int		w;
+	int		a;
+	int		s;
+	int		d;
+	int		left;
+	int		right;
+	int		esc;
+}	t_key_state;
 
 typedef struct s_texture
 {
-    void    *img;
-    char    *data;
-    int     width;
-    int     height;
-    int     bpp;
-    int     size_line;
-    int     endian;
-}   t_texture;
+	void	*img;
+	char	*data;
+	int		width;
+	int		height;
+	int		bpp;
+	int		size_line;
+	int		endian;
+}	t_texture;
 
 typedef struct s_map
 {
-    int map_fd;
-    void    *mlx;
-    void    *win;
-    void    *img;
-    char    *img_data;
-    int     img_bpp;
-    int     img_size_line;
-    int     img_endian;
-    char    **map;
-    char    *no_texture;    
-    char    *so_texture;    
-    char    *we_texture;    
-    char    *ea_texture;    
-    char    *floor_color; 
-    char    *ceiling_color;
-    int     floor_rgb;
-    int     ceiling_rgb;
-    t_texture north_tex;
-    t_texture south_tex;
-    t_texture west_tex;
-    t_texture east_tex;
-    int     width;
-    int     height;
-    t_ray   rays[RAY_NUM];
-    t_player player;
-    int     player_set;
-    t_key_state keys;
-}   t_map;
+	int			map_fd;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*img_data;
+	int			img_bpp;
+	int			img_size_line;
+	int			img_endian;
+	char		**map;
+	char		*no_texture;
+	char		*so_texture;
+	char		*we_texture;
+	char		*ea_texture;
+	char		*floor_color;
+	char		*ceiling_color;
+	int			floor_rgb;
+	int			ceiling_rgb;
+	t_texture	north_tex;
+	t_texture	south_tex;
+	t_texture	west_tex;
+	t_texture	east_tex;
+	int			width;
+	int			height;
+	t_ray		rays[RAY_NUM];
+	t_player	player;
+	int			player_set;
+	t_key_state	keys;
+}	t_map;
 
-int     handle_key_press(int keycode, t_map *map);
-int     handle_key_release(int keycode, t_map *map);
-int     update_player(t_map *map);
-
-void    setup_events(t_map *map);
-
-int     validate_and_set_player(t_map *map);
-int     parse_rgb_color(char *color_str);
-int     load_textures(t_map *map);
-int     get_texture_pixel(t_texture *tex, int x, int y);
-
-
-
-
-int     map_height(char *av);
-t_map   *init_map_height(int h);
-void    fill_map_content(t_map *map, char *av);
-int     is_valid_move(t_map *map, int new_x, int new_y);
-
-t_map   *fill_map(char *av);
-
-void    pixel_put_img(t_map *map, int x, int y, int color);
-
-int     ft_strlen1(char *str);
-int     read_file(t_map *map, char *filename);
-int     parse_map_config(t_map *map);
-char    *skip_spaces(char *str);
-char    *extract_path(char *line);
-int     parse_color(char *line);
-int     validate_color_format(char *color_str);
-int     validate_parsing_completeness(t_map *map);
-
-void    load_game(t_map *map);
-void    set_color(t_map *map);
-void    draw_player(t_map *map);
-void    draw_square(t_map *map, int x, int y, int color);
-void    render_scene(t_map *map);
-void    setup_rendering(t_map *map);
-void    cast_fov_rays(t_map *game);
-void    cast_fov_rays_sparse(t_map *game, int ray_spacing);
-int     handle_key_input(int keycode, t_map *map);
-int     handle_close(t_map *map);
-
-void    ft_putnbr(int n);
-
-void    draw_pixel(t_map *game, int x, int y, int color);
-
-void    render_game_view(t_map *game);
+int		handle_key_press(int keycode, t_map *map);
+int		handle_key_release(int keycode, t_map *map);
+int		update_player(t_map *map);
+void	setup_events(t_map *map);
+double	deg_to_rad(double angle_degrees);
+int		validate_and_set_player(t_map *map);
+int		parse_rgb_color(char *color_str);
+int		load_textures(t_map *map);
+int		get_texture_pixel(t_texture *tex, int x, int y);
+int		map_height(char *av);
+t_map	*init_map_height(int h);
+void	fill_map_content(t_map *map, char *av);
+int		is_valid_move(t_map *map, int new_x, int new_y);
+t_map	*fill_map(char *av);
+void	pixel_put_img(t_map *map, int x, int y, int color);
+int		ft_strlen1(char *str);
+int		read_file(t_map *map, char *filename);
+int		parse_map_config(t_map *map);
+char	*skip_spaces(char *str);
+char	*extract_path(char *line);
+int		parse_color(char *line);
+int		validate_color_format(char *color_str);
+int		validate_parsing_completeness(t_map *map);
+void	load_game(t_map *map);
+void	set_color(t_map *map);
+void	draw_player(t_map *map);
+void	draw_square(t_map *map, int x, int y, int color);
+void	render_scene(t_map *map);
+void	setup_rendering(t_map *map);
+void	cast_fov_rays(t_map *game);
+void	cast_fov_rays_sparse(t_map *game, int ray_spacing);
+int		handle_key_input(int keycode, t_map *map);
+int		handle_close(t_map *map);
+void	ft_putnbr(int n);
+void	draw_pixel(t_map *game, int x, int y, int color);
+void	render_game_view(t_map *game);
 
 #endif

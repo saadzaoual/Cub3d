@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movment.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abnemili <abnemili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 13:10:06 by abnemili          #+#    #+#             */
-/*   Updated: 2025/09/03 09:52:17 by abnemili         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:02:07 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,23 @@ int update_player(t_map *map)
 
     if (map->keys.w)
     {
-        move_x += cos(DEG_TO_RAD(angle)) * MOVE_SPEED;
-        move_y += sin(DEG_TO_RAD(angle)) * MOVE_SPEED;
+        move_x += cos(deg_to_rad(angle)) * MOVE_SPEED;
+        move_y += sin(deg_to_rad(angle)) * MOVE_SPEED;
     }
     if (map->keys.s)
     {
-        move_x -= cos(DEG_TO_RAD(angle)) * MOVE_SPEED;
-        move_y -= sin(DEG_TO_RAD(angle)) * MOVE_SPEED;
+        move_x -= cos(deg_to_rad(angle)) * MOVE_SPEED;
+        move_y -= sin(deg_to_rad(angle)) * MOVE_SPEED;
     }
     if (map->keys.a)
     {
-        move_x += cos(DEG_TO_RAD(angle - 90)) * MOVE_SPEED;
-        move_y += sin(DEG_TO_RAD(angle - 90)) * MOVE_SPEED;
+        move_x += cos(deg_to_rad(angle - 90)) * MOVE_SPEED;
+        move_y += sin(deg_to_rad(angle - 90)) * MOVE_SPEED;
     }
     if (map->keys.d)
     {
-        move_x += cos(DEG_TO_RAD(angle + 90)) * MOVE_SPEED;
-        move_y += sin(DEG_TO_RAD(angle + 90)) * MOVE_SPEED;
+        move_x += cos(deg_to_rad(angle + 90)) * MOVE_SPEED;
+        move_y += sin(deg_to_rad(angle + 90)) * MOVE_SPEED;
     }
 
     test_x = new_x + move_x;

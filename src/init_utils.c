@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abnemili <abnemili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 10:51:09 by abnemili          #+#    #+#             */
-/*   Updated: 2025/09/02 10:51:52 by abnemili         ###   ########.fr       */
+/*   Updated: 2025/11/17 20:02:07 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,9 @@ t_map *fill_map(char *av)
     validate_map(map);
 
     return map;
+}
+
+double deg_to_rad(double angle_degrees)
+{
+	return (angle_degrees * M_PI / 180.0);
 }
