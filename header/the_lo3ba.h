@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:00:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/17 20:02:07 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 18:19:32 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ typedef struct s_key_state
 	int		esc;
 }	t_key_state;
 
+typedef struct s_collision
+{
+	double	test_val;
+	double	move_val;
+	double	other_val;
+}	t_collision;
+
 typedef struct s_texture
 {
 	void	*img;
@@ -120,7 +127,11 @@ int		load_textures(t_map *map);
 int		get_texture_pixel(t_texture *tex, int x, int y);
 int		map_height(char *av);
 t_map	*init_map_height(int h);
+void	init_map_fields(t_map *map, int h);
+void	init_keys(t_map *map);
+void	init_rays(t_map *map);
 void	fill_map_content(t_map *map, char *av);
+void	read_map_lines(t_map *map, int fd);
 int		is_valid_move(t_map *map, int new_x, int new_y);
 t_map	*fill_map(char *av);
 void	pixel_put_img(t_map *map, int x, int y, int color);
@@ -145,5 +156,23 @@ int		handle_close(t_map *map);
 void	ft_putnbr(int n);
 void	draw_pixel(t_map *game, int x, int y, int color);
 void	render_game_view(t_map *game);
+void	free_textures(t_map *map);
+void	free_map_array(t_map *map);
+void	destroy_mlx_resources(t_map *map);
+int		init_mlx_connection(t_map *map);
+int		init_rendering(t_map *map);
+void	initial_render(t_map *map);
+void	setup_player(t_map *map);
+int		find_player_position(t_map *map);
+int		check_player_position(t_map *map, int x, int y);
+void	draw_square_line(t_map *map, int x, int y, int dy);
+void	validate_map(t_map *map);
+void	update_rotation(t_map *map, double *angle);
+void	calculate_movement(t_map *map, double angle, double *mx, double *my);
+void	calculate_strafe(t_map *map, double angle, double *mx, double *my);
+int		get_buffer_value(double move, double buffer);
+void	apply_movement(t_map *map, double *new_x, double *new_y, double buf);
+void	check_x_collision(t_map *map, double *new_x, t_collision col);
+void	check_y_collision(t_map *map, double *new_y, t_collision col);
 
 #endif

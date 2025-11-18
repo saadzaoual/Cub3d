@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/17 21:30:20 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 17:38:19 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	is_valid_xpm_path(const char *path)
 	close(fd);
 	return (1);
 }
+
 int	validate_texture(char *texture, char *name, char *dir)
 {
 	if (!texture)
@@ -48,6 +49,7 @@ int	validate_texture(char *texture, char *name, char *dir)
 	}
 	return (1);
 }
+
 int	validate_all_textures(t_map *map)
 {
 	int	valid;
@@ -63,6 +65,7 @@ int	validate_all_textures(t_map *map)
 		valid = 0;
 	return (valid);
 }
+
 int	parse_no_texture(t_map *map, char *line)
 {
 	if (map->no_texture)

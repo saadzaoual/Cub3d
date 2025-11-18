@@ -7,6 +7,7 @@ SRCS = \
 	get_line/get_next_line.c \
 	get_line/get_next_line_utils.c \
 	parsing/parsing_utils1.c \
+	parsing/parsing_utils2.c \
 	parsing/colors/parsing.colors.c \
 	parsing/colors/parsing.colors2.c \
 	parsing/maps/parsing_map1.c \
@@ -20,9 +21,14 @@ SRCS = \
 	src/main.c \
 	src/init.c \
 	src/movment.c \
+	src/movment2.c \
+	src/movment3.c \
 	src/init_utils.c \
 	src/loading_game.c \
+	src/loading_game2.c \
+	src/loading_game3.c \
 	src/handle_keys.c \
+	src/handle_keys2.c \
 	src/ray_casting_algo.c \
 	src/textures.c \
 

@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/17 21:41:50 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 17:25:34 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,58 +43,49 @@ char	*parse_rgb_value(char *ptr, int *value, int *has_digits)
 	}
 	return (ptr);
 }
+
+int	validate_rgb_component(char **ptr)
+{
+	int	value;
+	int	has_digits;
+
+	*ptr = parse_rgb_value(*ptr, &value, &has_digits);
+	if (!has_digits || value > 255)
+		return (0);
+	return (1);
+}
+
+int	check_basic_format(char *color_str, int *commas, int *num_count)
+{
+	if (!color_str || !check_color_chars(color_str, commas, num_count))
+		return (0);
+	if (*commas != 2 || *num_count < 3)
+		return (0);
+	return (1);
+}
+
 int	validate_color_format(char *color_str)
 {
 	int		commas;
 	int		num_count;
-	int		value;
-	int		has_digits;
 	char	*ptr;
 
-	if (!color_str || !check_color_chars(color_str, &commas, &num_count))
-		return (0);
-	if (commas != 2 || num_count < 3)
+	if (!check_basic_format(color_str, &commas, &num_count))
 		return (0);
 	ptr = skip_spaces(color_str);
-	ptr = parse_rgb_value(ptr, &value, &has_digits);
-	if (!has_digits || value > 255)
+	if (!validate_rgb_component(&ptr))
 		return (0);
 	ptr = skip_to_comma(ptr);
 	if (!ptr)
 		return (0);
-	ptr = parse_rgb_value(skip_spaces(ptr), &value, &has_digits);
-	if (!has_digits || value > 255)
+	ptr = skip_spaces(ptr);
+	if (!validate_rgb_component(&ptr))
 		return (0);
 	ptr = skip_to_comma(ptr);
 	if (!ptr)
 		return (0);
-	ptr = parse_rgb_value(skip_spaces(ptr), &value, &has_digits);
-	if (!has_digits || value > 255)
+	ptr = skip_spaces(ptr);
+	if (!validate_rgb_component(&ptr))
 		return (0);
 	return (1);
-}
-int	validate_color(char *color, char *name, char *type)
-{
-	if (!color)
-	{
-		printf("Error: Missing %s (%s) color\n", name, type);
-		return (0);
-	}
-	if (!validate_color_format(color))
-	{
-		printf("Error: Invalid %s color format: %s\n", type, color);
-		return (0);
-	}
-	return (1);
-}
-int	validate_all_colors(t_map *map)
-{
-	int	valid;
-
-	valid = 1;
-	if (!validate_color(map->floor_color, "F", "Floor"))
-		valid = 0;
-	if (!validate_color(map->ceiling_color, "C", "Ceiling"))
-		valid = 0;
-	return (valid);
 }

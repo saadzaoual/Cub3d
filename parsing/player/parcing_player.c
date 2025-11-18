@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/17 21:20:23 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 17:37:06 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	handle_player_spawn(t_map *map, int x, int y, int *player_count)
 	map->map[y][x] = '0';
 	map->player_set = 1;
 }
+
 char	*extract_path(char *line)
 {
 	char	*end;
@@ -60,6 +61,7 @@ char	*extract_path(char *line)
 		return (NULL);
 	return (copy_string(line, len));
 }
+
 void	init_directions(int *dx, int *dy)
 {
 	dx[0] = 0;

@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/17 21:30:58 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 17:37:48 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	parse_ea_texture(t_map *map, char *line)
 	map->ea_texture = extract_path(line);
 	return (1);
 }
+
 void	cleanup_textures(t_map *map)
 {
 	if (map->no_texture)

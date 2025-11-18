@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/17 21:28:20 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 17:28:17 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,26 @@ int	validate_and_set_player(t_map *map)
 	}
 	return (1);
 }
-char get_map_char(t_map *map, int x, int y)
+
+char	get_map_char(t_map *map, int x, int y)
 {
-	int len;
+	int	len;
 
 	if (y < 0 || y >= map->height)
-		return '\0';
+		return ('\0');
 	if (!map->map[y])
-		return '\0';
+		return ('\0');
 	if (x < 0)
-		return '\0';
+		return ('\0');
 	len = 0;
-	while (map->map[y][len] && map->map[y][len] != '\n' && map->map[y][len] != '\r')
+	while (map->map[y][len] && map->map[y][len] != '\n'
+		&& map->map[y][len] != '\r')
 		len++;
 	if (x >= len)
-		return '\0';
-	return map->map[y][x];
+		return ('\0');
+	return (map->map[y][x]);
 }
+
 int	check_boundary_escape(t_map *map, int nx, int ny)
 {
 	char	nc;
@@ -91,21 +94,21 @@ int	check_boundary_escape(t_map *map, int nx, int ny)
 	}
 	return (0);
 }
-int	flood_fill_loop(t_map *map, t_point *stack, char **visited,
-		int *stack_size)
+
+int	flood_fill_loop(t_map *map, t_flood_data *data)
 {
 	t_point	p;
 	char	c;
 
-	while (*stack_size > 0)
+	while (*data->stack_size > 0)
 	{
-		p = stack[--(*stack_size)];
+		p = data->stack[--(*data->stack_size)];
 		c = get_map_char(map, p.x, p.y);
 		if (c == '\0')
 			return (0);
 		if (c == '1')
 			continue ;
-		if (!process_neighbors(map, p, stack, visited, stack_size))
+		if (!process_neighbors(map, p, data))
 			return (0);
 	}
 	return (1);

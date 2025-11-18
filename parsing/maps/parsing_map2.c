@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/17 21:24:21 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 17:30:39 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,31 @@ int	parse_map_config(t_map *map)
 		if (!*line || *line == '\n')
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		result = parse_config_line(map, line);
 		if (result == 0)
 			return (0);
 		if (result == -1)
-			break;
+			break ;
 		i++;
 	}
 	return (1);
 }
+
 int	check_first_row(t_map *map)
 {
 	int		x;
 	char	c;
 
 	x = 0;
-	while (map->map[0][x] && map->map[0][x] != '\n' && map->map[0][x] != '\r')
+	while (map->map[0][x] && map->map[0][x] != '\n'
+		&& map->map[0][x] != '\r')
 	{
 		c = map->map[0][x];
 		if (c != '1' && c != ' ' && c != '\t')
 		{
-			printf("Error\nFirst row must only contain walls ('1') or spaces\n");
+			printf("Error\nFirst row must only contain walls\n");
 			return (0);
 		}
 		x++;
@@ -76,6 +78,7 @@ int	check_last_row(t_map *map)
 	}
 	return (1);
 }
+
 int	get_row_length(char *row)
 {
 	int	len;

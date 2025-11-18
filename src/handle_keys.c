@@ -3,123 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   handle_keys.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abnemili <abnemili@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 12:03:40 by abnemili          #+#    #+#             */
-/*   Updated: 2025/09/02 13:10:58 by abnemili         ###   ########.fr       */
+/*   Updated: 2025/11/18 17:48:41 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/the_lo3ba.h"
 
-void clear_player_area(t_map *map)
+int	get_tile_color(t_map *map, int tile_y, int tile_x)
 {
-    int x = -1;
-    int y;
-    int tile_x;
-    int tile_y;
-    int color;
-    
-    while (x <= 1)
-    {
-        y = -1;
-        while (y <= 1)
-        {
-            tile_x = (map->player.player_x + PLAYER_OFFSET + PLAYER_SIZE / 2) / TILE + x;
-            tile_y = (map->player.player_y + PLAYER_OFFSET + PLAYER_SIZE / 2) / TILE + y;
-
-            if (tile_x >= 0 && tile_x < map->width && tile_y >= 0 && tile_y < map->height)
-            {
-                
-                if (map->map[tile_y] && map->map[tile_y][tile_x] && 
-                    map->map[tile_y][tile_x] != '\n' && map->map[tile_y][tile_x] != '\r')
-                {
-                    if (map->map[tile_y][tile_x] == '1' || map->map[tile_y][tile_x] == ' ')
-                        color = COLOR_WALL;
-                    else if (map->map[tile_y][tile_x] == '0')
-                        color = COLOR_FREE;
-                    else
-                    {
-                        y++;
-                        continue;
-                    }
-
-                    draw_square(map, tile_x, tile_y, color);
-                }
-            }
-            y++;
-        }
-        x++;
-    }
+	if (map->map[tile_y][tile_x] == '1' || map->map[tile_y][tile_x] == ' ')
+		return (COLOR_WALL);
+	else if (map->map[tile_y][tile_x] == '0')
+		return (COLOR_FREE);
+	return (-1);
 }
 
-int handle_close(t_map *map)
+void	process_tile(t_map *map, int tile_x, int tile_y)
 {
-    if (!map)
-        exit(0);
+	int	color;
 
-    if (map->no_texture)
-        free(map->no_texture);
-    if (map->so_texture)
-        free(map->so_texture);
-    if (map->we_texture)
-        free(map->we_texture);
-    if (map->ea_texture)
-        free(map->ea_texture);
-    if (map->floor_color)
-        free(map->floor_color);
-    if (map->ceiling_color)
-        free(map->ceiling_color);
-
-    if (map->map)
-    {
-        for (int i = 0; i < map->height && map->map[i]; i++)
-            free(map->map[i]);
-        free(map->map);
-    }
-
-    if (map->mlx)
-    {
-        if (map->north_tex.img)
-            mlx_destroy_image(map->mlx, map->north_tex.img);
-        if (map->south_tex.img)
-            mlx_destroy_image(map->mlx, map->south_tex.img);
-        if (map->west_tex.img)
-            mlx_destroy_image(map->mlx, map->west_tex.img);
-        if (map->east_tex.img)
-            mlx_destroy_image(map->mlx, map->east_tex.img);
-        if (map->img)
-            mlx_destroy_image(map->mlx, map->img);
-        if (map->win)
-            mlx_destroy_window(map->mlx, map->win);
-        mlx_destroy_display(map->mlx);
-        free(map->mlx);
-    }
-
-    free(map);
-    exit(0);
-    return 0;
+	if (tile_x >= 0 && tile_x < map->width
+		&& tile_y >= 0 && tile_y < map->height)
+	{
+		if (map->map[tile_y] && map->map[tile_y][tile_x]
+			&& map->map[tile_y][tile_x] != '\n'
+			&& map->map[tile_y][tile_x] != '\r')
+		{
+			color = get_tile_color(map, tile_y, tile_x);
+			if (color != -1)
+				draw_square(map, tile_x, tile_y, color);
+		}
+	}
 }
 
-int is_valid_move(t_map *map, int new_x, int new_y)
+void	clear_player_area(t_map *map)
 {
-    int tile_x, tile_y;
+	int	x;
+	int	y;
+	int	tile_x;
+	int	tile_y;
 
-    tile_x = (new_x + PLAYER_OFFSET + PLAYER_SIZE / 2) / TILE;
-    tile_y = (new_y + PLAYER_OFFSET + PLAYER_SIZE / 2) / TILE;
-
-    if (tile_x < 0 || tile_x >= map->width ||
-        tile_y < 0 || tile_y >= map->height)
-        return 0;
-
-    
-    if (!map->map[tile_y] || !map->map[tile_y][tile_x] || 
-        map->map[tile_y][tile_x] == '\n' || map->map[tile_y][tile_x] == '\r')
-        return 0;  
-
-    if (map->map[tile_y][tile_x] == '1' || map->map[tile_y][tile_x] == ' ')
-        return 0;
-
-    return 1;
+	x = -1;
+	while (x <= 1)
+	{
+		y = -1;
+		while (y <= 1)
+		{
+			tile_x = (map->player.player_x + PLAYER_OFFSET
+					+ PLAYER_SIZE / 2) / TILE + x;
+			tile_y = (map->player.player_y + PLAYER_OFFSET
+					+ PLAYER_SIZE / 2) / TILE + y;
+			process_tile(map, tile_x, tile_y);
+			y++;
+		}
+		x++;
+	}
 }
-    
+
+void	free_textures(t_map *map)
+{
+	if (map->no_texture)
+		free(map->no_texture);
+	if (map->so_texture)
+		free(map->so_texture);
+	if (map->we_texture)
+		free(map->we_texture);
+	if (map->ea_texture)
+		free(map->ea_texture);
+	if (map->floor_color)
+		free(map->floor_color);
+	if (map->ceiling_color)
+		free(map->ceiling_color);
+}
+
+void	free_map_array(t_map *map)
+{
+	int	i;
+
+	if (map->map)
+	{
+		i = 0;
+		while (i < map->height && map->map[i])
+		{
+			free(map->map[i]);
+			i++;
+		}
+		free(map->map);
+	}
+}

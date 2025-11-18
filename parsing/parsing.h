@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/17 21:41:50 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 17:35:12 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ typedef struct s_point
 	int	y;
 }	t_point;
 
+typedef struct s_flood_data
+{
+	t_point	*stack;
+	char	**visited;
+	int		*stack_size;
+}	t_flood_data;
+
 /* Utils functions */
 int		ft_strlen1(char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -36,6 +43,9 @@ void	free_visited(char **visited, t_map *map);
 
 /* Color functions */
 int		check_color_chars(char *color_str, int *commas, int *num_count);
+char	*parse_rgb_value(char *ptr, int *value, int *has_digits);
+int		validate_rgb_component(char **ptr);
+int		check_basic_format(char *color_str, int *commas, int *num_count);
 int		validate_color_format(char *color_str);
 int		validate_color(char *color, char *name, char *type);
 int		validate_all_colors(t_map *map);
@@ -63,6 +73,8 @@ int		get_row_length(char *row);
 int		find_first_nonspace(char *row, int len);
 int		find_last_nonspace(char *row, int len);
 int		check_row_borders(t_map *map, int y, int first_char, int last_char);
+int		should_skip_row(t_map *map, int y, int *len);
+int		validate_row_borders(t_map *map, int y, int len);
 int		check_middle_rows(t_map *map);
 int		check_map_borders(t_map *map);
 void	process_map_char(t_map *map, int x, int y, int *player_count);
@@ -74,12 +86,9 @@ int		check_map_closed(t_map *map, int start_x, int start_y);
 void	cleanup_map_array(t_map *map);
 
 /* Flood fill functions */
-int		flood_fill_loop(t_map *map, t_point *stack, char **visited,
-			int *stack_size);
-void	add_neighbor_to_stack(t_point *stack, char **visited, int *stack_size,
-			t_point neighbor);
-int		process_neighbors(t_map *map, t_point p, t_point *stack,
-			char **visited, int *stack_size);
+int		flood_fill_loop(t_map *map, t_flood_data *data);
+void	add_neighbor_to_stack(t_flood_data *data, t_point neighbor);
+int		process_neighbors(t_map *map, t_point p, t_flood_data *data);
 char	**allocate_visited(t_map *map);
 t_point	*allocate_stack(t_map *map, char **visited);
 
