@@ -19,18 +19,25 @@ SRCS = \
 	parsing/textures/parsing_textures2.c \
 	parsing/textures/parsing_textures3.c \
 	src/main.c \
-	src/init.c \
-	src/movment.c \
-	src/movment2.c \
-	src/movment3.c \
-	src/init_utils.c \
-	src/loading_game.c \
-	src/loading_game2.c \
-	src/loading_game3.c \
-	src/handle_keys.c \
-	src/handle_keys2.c \
-	src/ray_casting_algo.c \
-	src/textures.c \
+	src/main_utils/main_utils.c \
+	src/main_utils/main_utils2.c \
+	src/main_utils/main_utils3.c \
+	src/main_utils/main_utils4.c \
+	src/main_utils/main_utils5.c \
+	src/init/init.c \
+	src/init/init_utils.c \
+	src/movment/movment.c \
+	src/movment/movment2.c \
+	src/movment/movment3.c \
+	src/game_loading/loading_game.c \
+	src/game_loading/loading_game2.c \
+	src/game_loading/loading_game3.c \
+	src/keys/handle_keys.c \
+	src/keys/handle_keys2.c \
+	src/ray_cast/ray_casting_algo1.c \
+	src/ray_cast/ray_casting_algo2.c \
+	src/ray_cast/ray_casting_algo3.c \
+	src/textures/textures.c \
 
 
 OBJS = $(SRCS:.c=.o)

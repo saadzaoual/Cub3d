@@ -6,11 +6,11 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 09:44:32 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 17:56:26 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 19:52:23 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/the_lo3ba.h"
+#include "../../header/the_lo3ba.h"
 
 int	map_height(char *av)
 {

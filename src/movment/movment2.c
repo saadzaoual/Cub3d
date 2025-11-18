@@ -6,11 +6,11 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:10:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/18 18:19:32 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 19:52:23 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/the_lo3ba.h"
+#include "../../header/the_lo3ba.h"
 
 void	update_rotation(t_map *map, double *angle)
 {

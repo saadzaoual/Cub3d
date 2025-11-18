@@ -6,11 +6,11 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 12:03:28 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 18:01:45 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 19:52:23 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/the_lo3ba.h"
+#include "../../header/the_lo3ba.h"
 
 void	pixel_put_img(t_map *map, int x, int y, int color)
 {

@@ -6,11 +6,11 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 12:03:40 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 17:48:41 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 19:52:24 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/the_lo3ba.h"
+#include "../../header/the_lo3ba.h"
 
 int	get_tile_color(t_map *map, int tile_y, int tile_x)
 {

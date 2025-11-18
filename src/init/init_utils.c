@@ -6,11 +6,11 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/02 10:51:09 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 17:56:33 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 19:52:23 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/the_lo3ba.h"
+#include "../../header/the_lo3ba.h"
 
 void	validate_map(t_map *map)
 {

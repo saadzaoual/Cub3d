@@ -6,11 +6,11 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 18:15:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/18 18:19:32 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/18 19:52:23 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/the_lo3ba.h"
+#include "../../header/the_lo3ba.h"
 
 void	check_y_collision(t_map *map, double *new_y, t_collision col)
 {
