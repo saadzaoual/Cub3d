@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 20:16:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/18 20:22:22 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:13:22 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	validate_map_position(t_map *map, int start_idx)
 	if (start_idx >= map->height)
 	{
 		printf("Error\nNo map grid found in file\n");
-		cleanup_map(map);
 		return (0);
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 17:36:09 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:13:22 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	process_map_char(t_map *map, int x, int y, int *player_count)
 	else
 	{
 		printf("Error\nInvalid character '%c' in map at (%d,%d)\n", c, y, x);
-		cleanup_map(map);
 		exit(1);
 	}
 }

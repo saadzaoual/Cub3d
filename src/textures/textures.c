@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 20:10:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/18 20:11:38 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:38:08 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	parse_rgb_components(char *color_str, int *components)
 			num = num * 10 + (color_str[i] - '0');
 			i++;
 		}
+		if (num > 255)
+			num = 255;
 		components[comp_idx] = num;
 		comp_idx++;
 		while (color_str[i] == ' ' || color_str[i] == ',')

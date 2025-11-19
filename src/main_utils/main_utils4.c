@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 20:18:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/18 20:32:51 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:13:22 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	extract_map_grid(t_map *map, t_map_bounds *bounds)
 	if (!grid)
 	{
 		printf("Error\nMemory allocation failed\n");
-		cleanup_map(map);
 		return (0);
 	}
 	copy_map_lines(grid, map->map, bounds->start_idx, map_lines);

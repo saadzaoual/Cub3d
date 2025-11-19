@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 17:28:17 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:13:22 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,12 @@ int	validate_and_set_player(t_map *map)
 	if (player_count == 0)
 	{
 		printf("Error\nNo player spawn (N/S/W/E) found in map\n");
-		cleanup_map(map);
-		exit(1);
+		return (0);
 	}
 	if (!check_map_closed(map, player_x, player_y))
 	{
 		printf("Error\nMap is not closed - player can escape to the outside\n");
-		cleanup_map(map);
-		exit(1);
+		return (0);
 	}
 	return (1);
 }

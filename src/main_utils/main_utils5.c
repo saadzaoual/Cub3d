@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 20:19:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/18 20:32:51 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:13:22 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ int	process_map_extraction(t_map *map)
 		return (0);
 	bounds.start_idx = start_idx;
 	if (!find_map_bounds(map, &bounds))
-	{
-		cleanup_map(map);
 		return (0);
-	}
 	if (!extract_map_grid(map, &bounds))
 		return (0);
 	return (1);

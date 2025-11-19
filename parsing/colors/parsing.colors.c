@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 17:25:34 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:40:24 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char	*parse_rgb_value(char *ptr, int *value, int *has_digits)
 	{
 		*value = *value * 10 + (*ptr++ - '0');
 		*has_digits = 1;
+		if (*value > 255)
+			break ;
 	}
 	return (ptr);
 }

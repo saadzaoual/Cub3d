@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 00:00:00 by abnemili          #+#    #+#             */
-/*   Updated: 2025/11/18 17:37:06 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/19 20:13:22 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	handle_player_spawn(t_map *map, int x, int y, int *player_count)
 	if (*player_count > 1)
 	{
 		printf("Error\nMap contains more than one player spawn\n");
-		cleanup_map(map);
 		exit(1);
 	}
 	map->player.player_x = x * TILE + TILE / 2;
