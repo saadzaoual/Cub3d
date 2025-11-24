@@ -6,7 +6,7 @@
 /*   By: szaoual <szaoual@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:00:00 by szaoual           #+#    #+#             */
-/*   Updated: 2025/11/18 20:44:43 by szaoual          ###   ########.fr       */
+/*   Updated: 2025/11/24 17:03:52 by szaoual          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # define PLAYER_COLOR 0x00FF00
 # define COLOR_WALL 0x4B0082
 # define COLOR_FREE 0x006600
-# define ROTATION_SPEED 1
-# define MOVE_SPEED 1
+# define ROTATION_SPEED 5
+# define MOVE_SPEED 5
 # define PLAYER_SIZE 8
 # define PLAYER_OFFSET 12
 # define SCREEN_WIDTH 1500
