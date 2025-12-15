@@ -18,17 +18,17 @@ int	check_and_open_file(char *filename, t_map *map)
 	int	len;
 
 	if (!filename)
-		return (0);
+		return (printf("Error\nInvalid filename\n"), 0);
 	len = ft_strlen1(filename);
-	if (len < 5)
-		return (0);
+	if (len <= 4)
+		return (printf("Error\nFilename must have a name before .cub\n"), 0);
 	if (ft_strncmp(filename + len - 4, ".cub", 4) != 0)
-		return (0);
-	if (filename[0] == '.' && len == 4)
-		return (0);
+		return (printf("Error\nFile must have .cub extension\n"), 0);
+	if (filename[len - 5] == '/')
+		return (printf("Error\nInvalid filename format\n"), 0);
 	map->map_fd = open(filename, O_RDONLY);
 	if (map->map_fd < 0)
-		return (0);
+		return (printf("Error\nCannot open file\n"), 0);
 	return (1);
 }
 
